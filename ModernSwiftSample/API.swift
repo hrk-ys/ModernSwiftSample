@@ -22,17 +22,28 @@ private extension String {
 
 enum API {
     case Repositories
-    
+}
 
+typealias APIProvider = RxMoyaProvider<API>
+
+private func JSONResponseDataFormatter(data: NSData) -> NSData {
+    do {
+        let dataAsJSON = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+        let prettyData =  try NSJSONSerialization.dataWithJSONObject(dataAsJSON, options: .PrettyPrinted)
+        return prettyData
+    } catch {
+        return data //fallback to original data if it cant be serialized
+    }
 }
 
 extension API {
-    static func DefaultProvider() -> MoyaProvider<API> {
-        return MoyaProvider<API>()
+    
+    static func DefaultProvider() -> APIProvider {
+        return RxMoyaProvider<API>(plugins: [NetworkLoggerPlugin(verbose: false, responseDataFormatter: JSONResponseDataFormatter)])
     }
     
-    static func StubProvider() -> MoyaProvider<API> {
-        return MoyaProvider(stubClosure: MoyaProvider.ImmediatelyStub)
+    static func StubProvider() -> APIProvider {
+        return RxMoyaProvider(stubClosure: MoyaProvider.ImmediatelyStub)
     }
 }
 
@@ -46,7 +57,7 @@ extension API: TargetType {
     var method: Moya.Method {
         switch self {
         case .Repositories:
-            return .POST
+            return .GET
         }
     }
     var parameters: [String: AnyObject]? {
@@ -58,12 +69,21 @@ extension API: TargetType {
     var sampleData: NSData {
         switch self {
         case .Repositories:
-            return "{\"id\": 100, \"first_name\": \"foo\", \"last_name\": \"var\"}".UTF8EncodedData
+            return stubbedResponse("Repositories")
         }
     }
     var multipartBody: [MultipartFormData]? {
         // Optional
         return nil
     }
+}
+
+
+func stubbedResponse(filename: String) -> NSData! {
+    @objc class TestClass: NSObject { }
+    
+    let bundle = NSBundle(forClass: TestClass.self)
+    let path = bundle.pathForResource(filename, ofType: "json")
+    return NSData(contentsOfFile: path!)
 }
 

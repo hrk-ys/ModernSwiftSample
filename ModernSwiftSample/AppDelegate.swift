@@ -14,13 +14,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    private(set) var provider = API.DefaultProvider()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        API.StubProvider().request(.Repositories) { (result) in
-            debugPrint(result)
+        if
+            let window = window,
+            let root = window.rootViewController,
+            let navi = root as? UINavigationController,
+            let vc = navi.topViewController as? ViewController
+        {
+            vc.provider = provider
+//            vc.provider = API.StubProvider()
         }
+
         return true
     }
 
