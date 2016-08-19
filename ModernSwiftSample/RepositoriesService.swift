@@ -29,23 +29,32 @@ struct RepositoriesService {
     }
 
     
-    func loadRepositories() {
+    func loadRepositories(query: String? = nil) -> Observable<[Repository]> {
         
         // APIから取得
         
-        provider.request(.Repositories)
-            .debug()
-            .mapArray(Repository)
-            .debug()
-            .subscribeNext { repos in
-
-                let realm = self.realm
-                
-                try! realm.write {
-                    realm.add(repos, update: true)
-                }
-            }
-            .addDisposableTo(disposeBag)
-
+        return Observable.create { (observer) -> Disposable in
+            self.provider.request(.Repositories(query))
+                .debug()
+                .mapArray(Repository)
+                .debug()
+                .subscribe(
+                    onNext: { repos in
+                        let realm = self.realm
+                        
+                        try! realm.write {
+                            realm.add(repos, update: true)
+                        }
+                        
+                        observer.onNext(repos)
+                        observer.onCompleted()
+                    },
+                    onError: observer.onError,
+                    onCompleted: observer.onCompleted,
+                    onDisposed: nil)
+                .addDisposableTo(self.disposeBag)
+            
+            return NopDisposable.instance
+        }
     }
 }

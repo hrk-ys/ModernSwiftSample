@@ -21,7 +21,7 @@ private extension String {
 
 
 enum API {
-    case Repositories
+    case Repositories(String?)
 }
 
 typealias APIProvider = RxMoyaProvider<API>
@@ -39,7 +39,7 @@ private func JSONResponseDataFormatter(data: NSData) -> NSData {
 extension API {
     
     static func DefaultProvider() -> APIProvider {
-        return RxMoyaProvider<API>(plugins: [NetworkLoggerPlugin(verbose: false, responseDataFormatter: JSONResponseDataFormatter)])
+        return RxMoyaProvider<API>(plugins: [NetworkLoggerPlugin(verbose: true, responseDataFormatter: JSONResponseDataFormatter)])
     }
     
     static func StubProvider() -> APIProvider {
@@ -62,8 +62,8 @@ extension API: TargetType {
     }
     var parameters: [String: AnyObject]? {
         switch self {
-        case .Repositories:
-            return nil
+        case .Repositories(let query):
+            return ["query": query ?? ""]
         }
     }
     var sampleData: NSData {

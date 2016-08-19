@@ -17,17 +17,24 @@ class ViewController: UITableViewController {
 
     let disposeBag = DisposeBag()
     
-    var provider:APIProvider!
+//    var provider:APIProvider!
+    var provider = API.StubProvider()
     var repositories:[Repository] = []
     
     var dataSource = RxTableViewSectionedReloadDataSource<SectionModel<String, Repository>>()
     var viewModel:ViewModel!
    
+    deinit {
+        print("ViewConntroller deinit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        viewModel = ViewModel(provider: provider)
+        viewModel = ViewModel(provider: provider,
+                              searchTextObserver: searchDisplayController?.searchBar.rx_text.asDriver()
+        )
         
         tableView.dataSource = nil
         
@@ -47,30 +54,59 @@ class ViewController: UITableViewController {
             .bindTo(tableView.rx_itemsWithDataSource(dataSource))
             .addDisposableTo(disposeBag)
         
-        tableView.rx_itemSelected
-            .map { self.dataSource.itemAtIndexPath($0) }
-            .subscribeNext { print("selected repository \($0)") }
+        viewModel.error
+            .asDriver()
+            .driveNext { [weak self] (error) in
+                
+                guard let _ = error else { return }
+                self?.showError(error!)
+                
+                if let refresh = self?.refreshControl {
+                    refresh.endRefreshing()
+                }
+            }
             .addDisposableTo(disposeBag)
         
         tableView.rx_itemSelected
-            .subscribeNext { self.tableView.deselectRowAtIndexPath($0, animated: true) }
+            .map { [weak self] indexPath in self?.dataSource.itemAtIndexPath(indexPath) }
+            .subscribeNext { print("selected repository \($0)") }
+            .addDisposableTo(disposeBag)
+
+        tableView.rx_itemSelected
+            .subscribeNext { [weak self] indexPath in self?.tableView.deselectRowAtIndexPath(indexPath, animated: true) }
             .addDisposableTo(disposeBag)
         
         if let refresh = refreshControl {
             refresh.rx_controlEvent(.ValueChanged)
-                .debug()
-                .subscribeNext { self.viewModel.reloadData() }
+                .subscribeNext { [weak self] in self?.viewModel.reloadData() }
                 .addDisposableTo(disposeBag)
             
             viewModel.repositories
                 .asDriver()
-                .debug()
                 .driveNext {_ in
                     refresh.endRefreshing()
                 }
                 .addDisposableTo(disposeBag)
             
         }
+        
+        if let searchDisplayController = searchDisplayController,
+            let searchResults = viewModel.searchResults{
+            
+            let tableView = searchDisplayController.searchResultsTableView
+            
+            tableView.dataSource = nil
+            
+            searchResults
+                .asObservable()
+                .map{ [ SectionModel(model: "Repositories", items: $0) ] }
+                .bindTo(tableView.rx_itemsWithDataSource(dataSource))
+                .addDisposableTo(disposeBag)
+            
+
+            tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        }
+
     }
     
     private func setupDataSource() {
@@ -78,7 +114,9 @@ class ViewController: UITableViewController {
         dataSource.configureCell = { ds, tableView, indexPath, repository in
             let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
             cell.textLabel!.text = repository.name
-            cell.detailTextLabel!.text = repository.desc
+            if let textLabel = cell.detailTextLabel {
+                textLabel.text = repository.desc
+            }
             return cell
         }
         
