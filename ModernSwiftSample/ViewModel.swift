@@ -36,8 +36,10 @@ class ViewModel {
         
         if let searchTextObserver = searchTextObserver {
             searchResults = searchTextObserver
-                .throttle(0.3)
+                .debug()
+//                .throttle(0.3)
                 .distinctUntilChanged()
+                .debug()
                 .flatMapLatest { [weak self] query -> Driver<[Repository]> in
                     guard let weakSelf = self else { return Driver.just([]) }
                     
@@ -58,5 +60,5 @@ class ViewModel {
             }
             .addDisposableTo(disposeBag)
     }
-
+    
 }

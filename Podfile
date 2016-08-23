@@ -12,10 +12,10 @@ target 'ModernSwiftSample' do
   pod 'Moya/RxSwift'
   pod 'Moya-ObjectMapper/RxSwift', '~> 1.3'
   pod 'RxDataSources'
-end
 
-#target 'YOUR_TESTING_TARGET' do
-#    pod 'RxBlocking', '~> 2.0'
-#    pod 'RxTests',    '~> 2.0'
-#end
+  target 'ModernSwiftSampleTests' do
+      pod 'RxBlocking', '~> 2.0'
+      pod 'RxTests',    '~> 2.0'
+  end
+end
 
