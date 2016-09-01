@@ -21,6 +21,7 @@
 		E96828AA1D60AD990003C75C /* RepositoriesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96828A91D60AD990003C75C /* RepositoriesService.swift */; };
 		E9A2C0A21D655D9C00394E6B /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A2C0A11D655D9C00394E6B /* UIViewController+Alert.swift */; };
 		E9A3B0F11D6696B00090ECA8 /* ModernSwiftSampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A3B0F01D6696B00090ECA8 /* ModernSwiftSampleTests.swift */; };
+		E9FD21F81D77FA8800A3CF8D /* RepositoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FD21F71D77FA8800A3CF8D /* RepositoryCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		E9A3B0EE1D6696B00090ECA8 /* ModernSwiftSampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ModernSwiftSampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A3B0F01D6696B00090ECA8 /* ModernSwiftSampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernSwiftSampleTests.swift; sourceTree = "<group>"; };
 		E9A3B0F21D6696B00090ECA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E9FD21F71D77FA8800A3CF8D /* RepositoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepositoryCell.swift; sourceTree = "<group>"; };
 		F944A9813BB8E1AF650C3535 /* Pods_ModernSwiftSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ModernSwiftSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -128,6 +130,7 @@
 				E96828A41D6096690003C75C /* ViewModel */,
 				E96828A31D6096570003C75C /* ViewControllers */,
 				E904B5B91D60811F003ED215 /* Models */,
+				E9FD21F61D77FA6C00A3CF8D /* Views */,
 				E96828A81D60AD7F0003C75C /* Service */,
 				E904B5B61D5F1F4F003ED215 /* API */,
 				E904B5A31D5F1BBE003ED215 /* AppDelegate.swift */,
@@ -202,6 +205,14 @@
 				E9A3B0F21D6696B00090ECA8 /* Info.plist */,
 			);
 			path = ModernSwiftSampleTests;
+			sourceTree = "<group>";
+		};
+		E9FD21F61D77FA6C00A3CF8D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E9FD21F71D77FA8800A3CF8D /* RepositoryCell.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -412,6 +423,7 @@
 				E904B5A41D5F1BBE003ED215 /* AppDelegate.swift in Sources */,
 				E904B5BB1D608138003ED215 /* Repository.swift in Sources */,
 				E9A2C0A21D655D9C00394E6B /* UIViewController+Alert.swift in Sources */,
+				E9FD21F81D77FA8800A3CF8D /* RepositoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

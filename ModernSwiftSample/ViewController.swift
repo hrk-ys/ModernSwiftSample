@@ -37,6 +37,7 @@ class ViewController: UITableViewController {
         )
         
         tableView.dataSource = nil
+        tableView.rowHeight = 80
         
         refreshControl = UIRefreshControl()
  
@@ -113,12 +114,16 @@ class ViewController: UITableViewController {
         
         dataSource.configureCell = { ds, tableView, indexPath, repository in
             let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-            cell.textLabel!.text = repository.name
-            if let textLabel = cell.detailTextLabel {
-                textLabel.text = repository.desc
+            if let repositoryCell = cell as? RepositoryCell {
+                repositoryCell.repository = repository
+                repositoryCell.button.rx_tap.subscribeNext({ () in
+                    print(repository)
+                })
+                    .addDisposableTo(repositoryCell.disposeBag)
             }
             return cell
         }
+        
         
     }
     

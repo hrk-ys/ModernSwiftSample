@@ -16,6 +16,7 @@ class Repository : Object, Mappable {
     dynamic var name: String!
     dynamic var desc: String!
     dynamic var url: String!
+    dynamic var avatarUrl: String!
     
     override static func primaryKey() -> String? {
         return "identifier"
@@ -32,5 +33,6 @@ class Repository : Object, Mappable {
         name <- map["name"]
         desc <- map["description"]
         url <- map["html_url"]
+        avatarUrl <- map["owner.avatar_url"]
     }
 }

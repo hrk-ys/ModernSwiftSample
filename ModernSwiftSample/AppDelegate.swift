@@ -25,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let navi = root as? UINavigationController,
             let vc = navi.topViewController as? ViewController
         {
-            vc.provider = provider
-//            vc.provider = API.StubProvider()
+//            vc.provider = provider
+            vc.provider = API.StubProvider()
         }
 
         return true

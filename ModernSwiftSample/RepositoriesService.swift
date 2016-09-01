@@ -12,6 +12,9 @@ import RxCocoa
 import RealmSwift
 import RxRealm
 
+
+// DataStore、NetWorkから取得する
+
 struct RepositoriesService {
     
     let disposeBag = DisposeBag()

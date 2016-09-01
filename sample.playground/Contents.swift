@@ -2,7 +2,7 @@
 
 import Foundation
 //import Alamofire
-import Moya
+//import Moya
 
 import XCPlayground
 
@@ -15,7 +15,12 @@ private extension String {
     }
 }
 
+let strs = ["aa", "bb"].filter { $0 == "bb" }
+print(strs)
 
+(1..<10).map{ "\($0)" }
+
+/*
 enum API {
     case Repositories
 }
@@ -112,3 +117,5 @@ Alamofire.request(Router.Search(query: "foo bar", page: 1))
 //}
 
 XCPSetExecutionShouldContinueIndefinitely()
+
+ */

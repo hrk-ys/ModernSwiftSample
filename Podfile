@@ -8,6 +8,7 @@ target 'ModernSwiftSample' do
   pod "RxRealm"
   pod 'ObjectMapper'
   pod 'Alamofire', '~> 3.4'
+  pod 'AlamofireImage'
   pod 'Moya'
   pod 'Moya/RxSwift'
   pod 'Moya-ObjectMapper/RxSwift', '~> 1.3'
